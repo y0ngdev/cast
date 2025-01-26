@@ -1,113 +1,156 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import Sonner from "@/Components/shadcn/ui/sonner/Sonner.vue";
+import {ref} from "vue";
+import {Button} from "@/Components/shadcn/ui/button";
+import {Input} from "@/Components/shadcn/ui/input";
+import {EyeClosed,Eye} from "lucide-vue-next";
+import {toast} from "vue-sonner";
+import {Icon} from "@iconify/vue";
+import {Separator} from "@/Components/shadcn/ui/separator";
+import {Label} from "@/Components/shadcn/ui/label";
 
+defineProps({
+    oauth: {
+        type: Boolean,
+    },
+
+});
 const form = useForm({
-    name: '',
+    username: '',
     email: '',
     password: '',
     password_confirmation: '',
-});
+})
+const show = ref(false)
+
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+    form.post(route('register'),
+
+        {
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        }
+    );
+};
+
+const signInWithGithub = () => {
+
+    toast("Logged in successfully!", {
+        description: "You have successfully logged in with Github.",
+
+    })
 };
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+    <Head title="Register"/>
+    <Sonner position="top-right"/>
 
-                <InputError class="mt-2" :message="form.errors.name" />
+    <div class="relative flex h-screen items-center justify-center">
+        <div
+            class="absolute h-full w-full bg-[radial-gradient(theme(colors.border/90%)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"
+        />
+        <div class=" relative w-full max-w-[350px] px-5">
+            <ApplicationLogo/>
+
+            <div class="flex flex-col items-center">
+                <h1 class="text-2xl font-bold tracking-tight lg:text-3xl">Sign Up</h1>
+                <p class="mt-1 text-muted-foreground">Create an account to get started.</p>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <form class="mt-10" @submit.prevent="submit">
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                <div class="grid gap-4">
+                    <!-- Username Field -->
+                    <div class="grid gap-2">
+                        <Label for="username">Username</Label>
+                        <Input
+                            id="username" v-model="form.username" :disabled="form.processing"
+                            autofocus
+                            placeholder="JohnDoe" required
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                        />
+                        <InputError :message="form.errors.username"/>
+                    </div>
+                    <!-- Email Field -->
+                    <div class="grid gap-2">
+                        <Label for="email">Email</Label>
+                        <Input
+                            id="email" v-model="form.email" :disabled="form.processing" autocomplete="email"
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                            placeholder="m@example.com" required
+                            type="email"
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+                        />
+                        <InputError :message="form.errors.email"/>
+                    </div>
 
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
+                    <!-- Password Field -->
+                    <!--                    todo: password meter-->
 
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
+                    <div class="grid gap-2">
+                        <Label for="password">Password</Label>
+                        <div class="relative w-full max-w-sm items-center">
+                            <Input
+                                id="password" v-model="form.password" :disabled="form.processing"
+                                :type="show ?'text':'password'"
+                                autocomplete="current-password"
+                                placeholder="Enter Password"
+                                required
+                            />
+                            <span class="absolute end-0 inset-y-0 flex items-center justify-center px-4 cursor-pointer"
+                                  @click="show = !show">
+                        <Eye v-if="!show" class="size-4"/>
+                        <EyeClosed v-else class="size-4"/>
+                    </span>
+                        </div>
+                        <InputError :message="form.errors.password"/>
+                    </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                >
-                    Already registered?
-                </Link>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                    <!-- Submit Button -->
+                    <Button
+                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full"
+                        type="submit"
+                    >
+                        Create account
+                    </Button>
+
+
+                </div>
+                <div v-if="oauth">
+                    <!-- OAuth Divider -->
+                    <Separator class="my-8 " label="OR"/>
+
+                    <!-- OAuth Providers -->
+                    <Button :disabled="form.processing" class="w-full" type="button" variant="outline"
+                            @click="signInWithGithub()">
+
+                        <Icon height="24" icon="mdi:github" width="24"/>
+                        <span class="ml-2">Continue with Github</span>
+                    </Button>
+                </div>
+
+
+                <!-- Register Link -->
+                <div class="mt-4 text-center text-sm text-muted-foreground">
+                    Already have an account?
+                    <Link :href="route('login')"
+                          class="font-semibold text-primary underline-offset-2 hover:underline">
+                        Log in
+                    </Link>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
 </template>
