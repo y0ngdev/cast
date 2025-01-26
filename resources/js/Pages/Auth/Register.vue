@@ -27,8 +27,9 @@ const form = useForm({
 const show = ref(false)
 
 function submit() {
+  // eslint-disable-next-line no-undef
   form.post(route('register'), {
-    onFinish: () => form.reset('password', 'password_confirmation'),
+    onFinish: () => form.reset('password'),
   })
 }
 
