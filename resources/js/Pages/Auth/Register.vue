@@ -6,6 +6,11 @@ import Sonner from "@/Components/shadcn/ui/sonner/Sonner.vue";
 import {ref} from "vue";
 import {Button} from "@/Components/shadcn/ui/button";
 import {Input} from "@/Components/shadcn/ui/input";
+import {EyeClosed,Eye} from "lucide-vue-next";
+import {toast} from "vue-sonner";
+import {Icon} from "@iconify/vue";
+import {Separator} from "@/Components/shadcn/ui/separator";
+import {Label} from "@/Components/shadcn/ui/label";
 
 defineProps({
     oauth: {
@@ -23,9 +28,20 @@ const show = ref(false)
 
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+    form.post(route('register'),
+
+        {
+            onFinish: () => form.reset('password', 'password_confirmation'),
+        }
+    );
+};
+
+const signInWithGithub = () => {
+
+    toast("Logged in successfully!", {
+        description: "You have successfully logged in with Github.",
+
+    })
 };
 </script>
 
