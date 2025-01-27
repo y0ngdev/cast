@@ -8,10 +8,9 @@ test('registration screen can be rendered', function (): void {
 
 test('new users can register', function (): void {
     $response = $this->post('/register', [
-        'name' => 'Test User',
+        'username' => 'user',
         'email' => 'test@example.com',
         'password' => 'password',
-        'password_confirmation' => 'password',
     ]);
 
     $this->assertAuthenticated();
