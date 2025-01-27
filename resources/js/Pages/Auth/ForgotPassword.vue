@@ -1,10 +1,12 @@
 <script setup>
 import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
-import GuestLayout from '@/Layouts/GuestLayout.vue'
-import { Head, useForm } from '@inertiajs/vue3'
+import { Button } from '@/Components/shadcn/ui/button'
+import { Input } from '@/Components/shadcn/ui/input'
+import { Label } from '@/Components/shadcn/ui/label'
+import { Sonner } from '@/Components/shadcn/ui/sonner'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import { KeyRound } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 
 defineProps({
   status: {
@@ -17,52 +19,67 @@ const form = useForm({
 })
 
 function submit() {
-  form.post(route('password.email'))
+  // eslint-disable-next-line no-undef
+  form.post(route('password.email'), {
+
+    onSuccess: (d) => {
+      toast('Link sent!', {
+        description: d.props.status,
+
+      })
+    },
+  })
 }
 </script>
 
 <template>
-  <GuestLayout>
-    <Head title="Forgot Password" />
-
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-      Forgot your password? No problem. Just let us know your email
-      address and we will email you a password reset link that will allow
-      you to choose a new one.
-    </div>
-
+  <Head title="Forgot Password" />
+  <Sonner position="top-right" />
+  <div class="relative flex h-screen items-center justify-center">
     <div
-      v-if="status"
-      class="mb-4 text-sm font-medium text-green-600 dark:text-green-400"
-    >
-      {{ status }}
+      class="absolute h-full w-full bg-[radial-gradient(theme(colors.border/90%)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"
+    />
+    <div class="relative z-[2] w-full max-w-[340px] px-5">
+      <div
+        class="mx-auto mb-6 flex size-14 items-center justify-center rounded-lg border bg-background"
+      >
+        <KeyRound class="size-6" />
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <h1 class="text-2xl font-bold tracking-tight lg:text-3xl">
+          Forgot Password
+        </h1>
+        <p class="mt-1 text-muted-foreground">
+          No worries, we'll send you reset instructions.
+        </p>
+      </div>
+
+      <form class="mt-10" @submit.prevent="submit">
+        <div class="grid gap-5">
+          <Label for="email">Email</Label>
+          <Input
+            id="email" v-model="form.email" :disabled="form.processing" autocomplete="username"
+            autofocus
+            placeholder="m@example.com" required
+            type="email"
+          />
+          <InputError :message="form.errors.email" />
+          <!-- Submit Button -->
+          <Button
+            :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full"
+            type="submit"
+          >
+            Send Link
+          </Button>
+        </div>
+      </form>
+
+      <p class="mt-8 text-center text-sm">
+        <Link :href="route('login')" class="font-semibold text-primary underline-offset-2 hover:underline">
+          Back to Log in
+        </Link>
+      </p>
     </div>
-
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="email" value="Email" />
-
-        <TextInput
-          id="email"
-          v-model="form.email"
-          type="email"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="username"
-        />
-
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4 flex items-center justify-end">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Email Password Reset Link
-        </PrimaryButton>
-      </div>
-    </form>
-  </GuestLayout>
+  </div>
 </template>
