@@ -1,9 +1,12 @@
 <script setup>
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import GuestLayout from '@/Layouts/GuestLayout.vue'
-import { Head, Link, useForm } from '@inertiajs/vue3'
+import { Button } from '@/Components/shadcn/ui/button'
+import { Sonner } from '@/Components/shadcn/ui/sonner'
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+import { MailCheck } from 'lucide-vue-next'
 import { computed } from 'vue'
+import { toast } from 'vue-sonner'
 
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   status: {
     type: String,
@@ -13,50 +16,70 @@ const props = defineProps({
 const form = useForm({})
 
 function submit() {
-  form.post(route('verification.send'))
+    // eslint-disable-next-line no-undef
+  form.post(route('verification.send'), {
+
+    onSuccess: (d) => {
+      if (d.props.status === 'verification-link-sent') {
+        toast('Link sent!', {
+          description: ' A new verification link has been sent to the email address you provided in your profile settings.',
+
+        })
+      }
+    },
+  })
 }
 
-const verificationLinkSent = computed(
-  () => props.status === 'verification-link-sent',
-)
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 </script>
 
 <template>
-  <GuestLayout>
-    <Head title="Email Verification" />
+  <Head title="Email Verification" />
 
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-      Thanks for signing up! Before getting started, could you verify your
-      email address by clicking on the link we just emailed to you? If you
-      didn't receive the email, we will gladly send you another.
-    </div>
-
+  <Sonner position="top-right" />
+  <div class="relative flex h-screen items-center justify-center">
     <div
-      v-if="verificationLinkSent"
-      class="mb-4 text-sm font-medium text-green-600 dark:text-green-400"
-    >
-      A new verification link has been sent to the email address you
-      provided during registration.
-    </div>
-
-    <form @submit.prevent="submit">
-      <div class="mt-4 flex items-center justify-between">
-        <PrimaryButton
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          Resend Verification Email
-        </PrimaryButton>
-
-        <Link
-          :href="route('logout')"
-          method="post"
-          as="button"
-          class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-        >
-          Log Out
-        </Link>
+      class="absolute h-full w-full bg-[radial-gradient(theme(colors.border/90%)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"
+    />
+    <div class="relative w-full max-w-[380px] px-5">
+      <div
+        class="mx-auto mb-6 flex size-14 items-center justify-center rounded-lg border bg-background"
+      >
+        <MailCheck class="size-8" />
       </div>
-    </form>
-  </GuestLayout>
+      <div class="flex flex-col items-center">
+        <h1 class="text-2xl font-bold tracking-tight lg:text-3xl">
+          Check your email
+        </h1>
+      </div>
+
+      <div class="my-4 text-sm text-gray-600 dark:text-gray-400">
+        We sent you a mail to <span class="font-semibold">{{ user.email }}</span>. If you didn't receive the email, we will gladly send you another.
+      </div>
+
+      <form @submit.prevent="submit">
+        <div class="mt-6 ">
+          <Button
+            :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-full"
+            type="submit"
+          >
+            Resend Verification Email
+          </Button>
+          <div>
+            <div class="mt-4 text-center text-sm text-muted-foreground">
+              <Link
+                :href="route('logout')"
+                class="font-semibold text-primary underline-offset-2 hover:underline"
+                method="post"
+              >
+                Logout
+              </Link>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>

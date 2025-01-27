@@ -74,10 +74,11 @@ onMounted(() => {
         <p class="mt-1 text-muted-foreground">
           Enter your email & password to log in.
         </p>
+        <div v-if="status" class="mt-2  text-sm font-medium text-green-600">
+          {{ status }}
+        </div>
       </div>
-      <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-        {{ status }}
-      </div>
+
       <form class="mt-10" @submit.prevent="submit">
         <div class="grid gap-4">
           <!-- Email Field -->
