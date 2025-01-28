@@ -9,21 +9,58 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::middleware('guest')->group(function (): void {
 
-
     Route::get('/auth/github/redirect', function () {
-        return Socialite::driver('github')->redirect();
+
+        try {
+            return Socialite::driver('github')->redirect();
+        } catch (Exception $e) {
+            return redirect('/login');
+        }
+
     });
 
     Route::get('/auth/github/callback', function () {
-        $user = Socialite::driver('github')->user();
+        $S_user = Socialite::driver('github')->user();
 
-        dd($user->getName(),$user->getId(),$user->getEmail(),$user->getAvatar(),$user->getNickname());
+        $user = User::where([
+            'provider' => 'github',
+            'provider_id' => $S_user->getId(),
+        ])->first();
+
+        if (!$user) {
+
+            $validator = Validator::make(
+                ['email' => $S_user->getEmail()],
+                ['email', 'email,unique:users'],
+                ['email.unique', "Couldn't Log in. Did you use a different login method?"]
+            );
+
+            if($validator->fails()){
+                return redirect('/login')->withErrors($validator);
+            }
+            $user = User::create([
+                'provider' => 'github',
+                'provider_id' => $S_user->getId(),
+                'name' => $S_user->getName(),
+                'email' => $S_user->getEmail(),
+                'avatar' => $S_user->getAvatar(),
+                'email_verified_at' => now(),
+
+            ]);
+
+        }
+        dd($S_user->getName(), $S_user->getId(), $S_user->getEmail(), $S_user->getAvatar(), $S_user->getNickname());
         // $user->token
+
+        Auth::login($user);
+
+        return redirect('/');
     });
 
     Route::get('register', [RegisteredUserController::class, 'create'])

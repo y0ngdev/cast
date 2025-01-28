@@ -27,10 +27,10 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/series', [SeriesController::class, 'index'])->name('');
 
-//    Route::middleware(EnsureNotALearner::class)->group(function (): void {
-//    Route::get('/series', [SeriesController::class, 'index'])->name('');
-//
-//    });
+    //    Route::middleware(EnsureNotALearner::class)->group(function (): void {
+    //    Route::get('/series', [SeriesController::class, 'index'])->name('');
+    //
+    //    });
 
 });
 
