@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
-use App\Http\Middleware\EnsureNotALearner;
+use App\Http\Controllers\TaxonomyController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,10 +27,15 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/series', [SeriesController::class, 'index'])->name('');
 
-//    Route::middleware(EnsureNotALearner::class)->group(function (): void {
-//    Route::get('/series', [SeriesController::class, 'index'])->name('');
-//
-//    });
+
+    Route::prefix('taxonomy')->name('taxonomy.')->group(function () {
+        Route::get('/', [TaxonomyController::class, 'index'])->name('index');
+        Route::get('/create', [TaxonomyController::class, 'create'])->name('create');
+    });
+    //    Route::middleware(EnsureNotALearner::class)->group(function (): void {
+    //    Route::get('/series', [SeriesController::class, 'index'])->name('');
+    //
+    //    });
 
 });
 

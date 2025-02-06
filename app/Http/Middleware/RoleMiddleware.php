@@ -11,11 +11,11 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if ((!auth()->check() || !auth()->user()->hasRole($role))) {
+        if ((! auth()->check() || ! auth()->user()->hasRole($role))) {
             abort(Response::HTTP_UNAUTHORIZED);
         }
 

@@ -1,0 +1,161 @@
+<script setup lang="ts">
+import Locked from '@/Components/player/locked.vue'
+
+import Player from '@/Components/player/player.vue'
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/shadcn/ui/breadcrumb'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/shadcn/ui/card'
+
+import { ScrollArea } from '@/Components/shadcn/ui/scroll-area'
+
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/shadcn/ui/tabs'
+import { Link } from '@inertiajs/vue3'
+import { ChevronLeft, Play } from 'lucide-vue-next'
+import { ref } from 'vue'
+
+const payed = ref(false)
+</script>
+
+<template>
+  <div class="flex min-h-screen w-full flex-col bg-muted/40">
+    <div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-3 ">
+      <header
+        class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
+      >
+        <Breadcrumb class="hidden md:flex">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink as-child>
+                <Link :href="route('login')">
+                  Courses
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <!--            <BreadcrumbItem> -->
+            <!--              <BreadcrumbLink as-child> -->
+            <!--                <a href="#">Orders</a> -->
+            <!--              </BreadcrumbLink> -->
+            <!--            </BreadcrumbItem> -->
+            <!--            <BreadcrumbSeparator /> -->
+            <BreadcrumbItem>
+              <BreadcrumbPage>Learn Vue 3</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </header>
+      <Link
+        class=" border rounded-full  w-8 h-8
+                flex items-center justify-center font-medium"
+      >
+        <ChevronLeft />
+      </Link>
+
+      <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+        <div class="grid auto-rows-max items-start gap-2 lg:col-span-2">
+          <div class="w-full overflow-hidden mt-6">
+            <Locked v-if="payed" />
+            <Player v-else />
+          </div>
+          <div />
+          <Tabs default-value="week">
+            <div class="flex items-center">
+              <TabsList>
+                <TabsTrigger value="week">
+                  Overview
+                </TabsTrigger>
+                <!--                <TabsTrigger value="month"> -->
+                <!--                  Month -->
+                <!--                </TabsTrigger> -->
+                <!--                <TabsTrigger value="year"> -->
+                <!--                  Year -->
+                <!--                </TabsTrigger> -->
+              </TabsList>
+            </div>
+            <TabsContent value="week">
+              <Card>
+                <CardContent class="mt-4">
+                  details...
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+        <div>
+          <Card class="overflow-hidden mt-6">
+            <CardHeader class="flex flex-row items-start bg-muted/50 border-b-[1px] p-2.5">
+              <CardTitle class="text-lg">
+                Course Content
+              </CardTitle>
+            </CardHeader>
+            <CardContent class="pt-6 p-0 text-sm">
+              <div class="flex relative flex-col flex-1">
+                <ul class="flex flex-col w-full h-full playlist max-h-[40rem] overflow-auto">
+                  <ScrollArea class="h-screen">
+                    <li class="hover:bg-gray-50 text-gray-800 ">
+                      <Link :href=" route('register')" class="flex items-center px-4 py-3 font-medium lg:space-x-4">
+                        <div class="hidden justify-center items-center w-7 h-7 text-sm font-semibold leading-relaxed text-center text-gray-600 bg-white rounded-full ring-2 ring-gray-200 lg:inline-flex shrink-0">
+                          1
+                        </div>
+                        <div class="md:max-w-sm pr-14  flex  flex-col space-y-0.5">
+                          <div class="text-sm">
+                            <p class="truncate">
+                              The longest word in any of the major English language dictionaries is
+                            </p>
+                          </div><div class="text-xs text-gray-400 flex">
+                            <span class="mr-4">
+                              Episode 1
+                            </span>  <span>
+                              12:30
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                    <li class="hover:bg-gray-50  bg-gray-50 text-primary">
+                      <Link :href=" route('register')" class="flex items-center px-4 py-3 font-medium lg:space-x-4">
+                        <div class="hidden justify-center items-center w-7 h-7 bg-orange-500 rounded-full ring-2 ring-orange-500 lg:flex">
+                          <Play class="w-5 h-5 text-white -mr-0.5 fill-white" />
+                        </div>
+                        <div class="md:max-w-sm pr-14  flex  flex-col space-y-0.5">
+                          <div class="text-sm">
+                            <p class="truncate">
+                              Building a Makefile for a Golang App
+                            </p>
+                          </div><div class="text-xs text-gray-400 flex">
+                            <span class="mr-4">
+                              Episode 1
+                            </span>  <span>
+                              12:30
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  </ScrollArea>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
+  </div>
+</template>

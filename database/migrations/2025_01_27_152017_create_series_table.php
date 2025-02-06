@@ -16,14 +16,13 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('instructor_id');
-            //            $table->string('category_id');
+            $table->foreignId('topic_id')->constrained('topics');
             $table->string('thumbnail_url');
             $table->enum('difficulty', ['beginner', 'intermediate', 'advanced']);
             $table->boolean('is_published')->default(false);
             $table->boolean('is_free')->default(false);
             $table->timestamps();
             $table->foreign('instructor_id')->references('id')->on('user');
-            //            $table->foreign('category_id')->references('id')->on('category');
         });
     }
 

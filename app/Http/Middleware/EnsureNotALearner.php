@@ -11,13 +11,14 @@ class EnsureNotALearner
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ((!auth()->check() || auth()->user()->hasRole('learner'))) {
+        if ((! auth()->check() || auth()->user()->hasRole('learner'))) {
             abort(Response::HTTP_UNAUTHORIZED);
         }
+
         return $next($request);
     }
 }

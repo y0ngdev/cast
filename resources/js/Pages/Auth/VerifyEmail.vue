@@ -6,17 +6,16 @@ import { MailCheck } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { toast } from 'vue-sonner'
 
-// eslint-disable-next-line no-unused-vars
-const props = defineProps({
-  status: {
-    type: String,
-  },
-})
+// const props = defineProps({
+//   status: {
+//     type: String,
+//   },
+// })
 
 const form = useForm({})
 
 function submit() {
-    // eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   form.post(route('verification.send'), {
 
     onSuccess: (d) => {

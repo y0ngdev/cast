@@ -58,21 +58,21 @@
       "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
       "@php artisan migrate --graceful --ansi"
     ],
-      "setup": [
-          "@php artisan key:generate",
-          "touch database/database.sqlite",
-          "php artisan migrate:fresh --seed --force --ansi",
-          "npm install",
-          "npm run build",
-          "@php artisan scribe:generate"
-      ],
-      "analyse": [
-          "./vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=1G"
-      ],
-      "format": [
-          "./vendor/bin/pint --ansi",
-          "./vendor/bin/rector --ansi"
-      ],
+    "setup": [
+      "@php artisan key:generate",
+      "touch database/database.sqlite",
+      "php artisan migrate:fresh --seed --force --ansi",
+      "npm install",
+      "npm run build",
+      "@php artisan scribe:generate"
+    ],
+    "analyse": [
+      "./vendor/bin/phpstan analyse -c phpstan.neon --ansi --memory-limit=1G"
+    ],
+    "format": [
+      "./vendor/bin/pint --ansi",
+      "./vendor/bin/rector --ansi"
+    ],
     "dev": "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
   },
   "extra": {
