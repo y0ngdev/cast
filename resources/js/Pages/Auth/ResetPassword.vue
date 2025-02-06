@@ -25,6 +25,7 @@ const form = useForm({
 })
 
 function submit() {
+  // eslint-disable-next-line no-undef
   form.post(route('password.store'), {
     onFinish: () => {
       form.reset('password', 'password_confirmation')

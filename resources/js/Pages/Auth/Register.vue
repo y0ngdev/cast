@@ -10,7 +10,6 @@ import { Icon } from '@iconify/vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import { Eye, EyeClosed } from 'lucide-vue-next'
 import { ref } from 'vue'
-import { toast } from 'vue-sonner'
 
 defineProps({
   oauth: {
@@ -34,10 +33,8 @@ function submit() {
 }
 
 function signInWithGithub() {
-  toast('Logged in successfully!', {
-    description: 'You have successfully logged in with Github.',
-
-  })
+  // eslint-disable-next-line no-undef
+  window.location.href = route('github.redirect')
 }
 </script>
 

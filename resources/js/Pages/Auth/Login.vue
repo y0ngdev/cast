@@ -40,10 +40,9 @@ function submit() {
 }
 
 function signInWithGithub() {
-  toast('Logged in successfully!', {
-    description: 'You have successfully logged in with Github.',
-
-  })
+  // eslint-disable-next-line no-undef
+  window.location.href = route('github.redirect')
+  // const popup = window.open(route('github.redirect'), 'AuthPopup', 'width=600,height=600 ')
 }
 onMounted(() => {
   try {
@@ -52,7 +51,7 @@ onMounted(() => {
     }
   }
   catch (e) {
-
+    console.error(e)
   }
 })
 </script>
