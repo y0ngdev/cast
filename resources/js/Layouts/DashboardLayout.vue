@@ -38,7 +38,7 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from '@/Components/shadcn/ui/sidebar'
-import { Link, usePage } from '@inertiajs/vue3'
+import { Head, Link, usePage } from '@inertiajs/vue3'
 import {
   AudioWaveform,
   BadgeCheck,
@@ -57,6 +57,8 @@ import {
   SquareTerminal,
 } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
+
+const prop = defineProps({ title: String })
 
 // This is sample data.
 const data = {
@@ -211,6 +213,7 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
+  <Head :title="prop.title" />
   <SidebarProvider>
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -429,13 +432,13 @@ const breadcrumbs = computed(() => {
         </div>
       </header>
       <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <div class="flex justify-between items-center mt-6 mb-4">
+        <main class="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <div v-if="$slots.header" class="flex justify-between items-center mt-6 mb-12">
             <div class="text-start">
-              <h3 class="text-2xl font-semibold leading-none tracking-tight">
+              <h3 v-if="$slots.header" class="text-2xl font-semibold leading-none tracking-tight">
                 <slot name="header" />
               </h3>
-              <p class="text-sm text-muted-foreground pt-2">
+              <p v-if="$slots.description" class="text-sm text-muted-foreground pt-2">
                 <slot name="description" />
               </p>
             </div>
