@@ -27,8 +27,7 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/series', [SeriesController::class, 'index'])->name('');
 
-
-    Route::prefix('taxonomy')->name('taxonomy.')->group(function () {
+    Route::prefix('taxonomy')->name('taxonomy.')->group(function (): void {
         Route::get('/', [TaxonomyController::class, 'index'])->name('index');
         Route::get('/create', [TaxonomyController::class, 'create'])->name('create');
         Route::post('/create', [TaxonomyController::class, 'store'])->name('store');

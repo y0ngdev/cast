@@ -13,7 +13,9 @@ class TaxonomyController extends Controller
     //
     public function index(): Response
     {
-        return Inertia::render('Taxonomy/Index');
+        return Inertia::render('Taxonomy/Index', [
+            'taxonomies' => Taxonomy::all(),
+        ]);
     }
 
     public function create(): Response
@@ -21,30 +23,19 @@ class TaxonomyController extends Controller
         return Inertia::render('Taxonomy/Create');
     }
 
-    public function store(Request $request): Response
-
+    public function store(Request $request)
     {
 
+        $request->merge(['slug' => Str::slug($request->slug)]);
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string',
+            'slug' => 'required|string|lowercase|max:255|unique:taxonomies,slug',
             'order' => 'required|integer',
 
         ]);
+        Taxonomy::create($request->all());
 
-        $slug = $request->slug;
-
-        if (!Str::startsWith($request->slug, '/')) {
-            $slug = '/' . $request->slug;
-        }
-
-
-        $user = Taxonomy::create([
-            'name' => $request->name,
-            'slug' =>  Str::slug($slug),
-            'order' => $request->order,
-
-        ]);
+        return redirect(route('taxonomy.index'));
     }
 }
