@@ -4,14 +4,13 @@ import { Button } from '@/Components/shadcn/ui/button'
 import { Input } from '@/Components/shadcn/ui/input'
 import { Label } from '@/Components/shadcn/ui/label'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import { useForm, usePage } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 const form = useForm({
   name: '',
   slug: '',
   order: false,
 })
-
 
 function submit() {
   // eslint-disable-next-line no-undef
@@ -37,7 +36,7 @@ function submit() {
           <div class="grid gap-2">
             <Label for="email">Name</Label>
             <Input
-              id="email" v-model="form.name" :disabled="form.processing"
+              id="name" v-model="form.name" :disabled="form.processing"
               autofocus
               placeholder="" required
               type="text"
