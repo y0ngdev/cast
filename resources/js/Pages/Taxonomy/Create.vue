@@ -1,48 +1,78 @@
 <script setup lang=ts>
+import InputError from '@/Components/InputError.vue'
+import { Button } from '@/Components/shadcn/ui/button'
+import { Input } from '@/Components/shadcn/ui/input'
+import { Label } from '@/Components/shadcn/ui/label'
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
-import { Link } from '@inertiajs/vue3'
-import { CirclePlus } from 'lucide-vue-next'
+import { useForm, usePage } from '@inertiajs/vue3'
+
+const form = useForm({
+  name: '',
+  slug: '',
+  order: false,
+})
+
+
+function submit() {
+  // eslint-disable-next-line no-undef
+  form.post(route('taxonomy.store'), {
+    onFinish: () => form.reset(),
+  })
+}
 </script>
 
 <template>
-  <DashboardLayout>
-    <div>
-      <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <div class="flex justify-between mt-6">
-          <div>
-            <div class="text-2xl font-medium">
-              Taxonomy
-            </div>
-            <p class="mt-2 text-sm text-muted-foreground">
-              View all Categories
-            </p>
+  <DashboardLayout title="Create Taxonomy">
+    <template #header>
+      Create  Taxonomy
+    </template>
+    <template #description>
+      This are some sort of category grouping for the series
+    </template>
+
+    <template #content>
+      <form class="" @submit.prevent="submit">
+        <div class="grid gap-4">
+          <!-- Email Field -->
+          <div class="grid gap-2">
+            <Label for="email">Name</Label>
+            <Input
+              id="email" v-model="form.name" :disabled="form.processing"
+              autofocus
+              placeholder="" required
+              type="text"
+            />
+            <InputError :message="form.errors.name" />
           </div>
 
-          <Link :href="route('taxonomy.create')">
-            <Button
-              type="button" variant=""
-            >
-              <CirclePlus height="24" width="24" />
-              Add Taxonomy
-            </Button>
-          </Link>
+          <!-- Password Field -->
+          <div class="grid gap-2">
+            <Label for="password">Slug</Label>
+            <Input
+              id="slug" v-model="form.slug" :disabled="form.processing"
+              required
+              type="text"
+            />
+            <InputError :message="form.errors.slug" />
+          </div><div class="grid gap-2">
+            <Label for="password">Order</Label>
+            <Input
+              id="order" v-model="form.order" :disabled="form.processing"
+              required
+              type="number"
+            />
+            <InputError :message="form.errors.order" />
+          </div>
+
+          <!-- Submit Button -->
+          <Button
+            :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="w-min"
+            type="submit"
+          >
+            Submit
+          </Button>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Products</CardTitle>
-            <CardDescription>
-              Manage your products and view their sales performance.
-            </CardDescription>
-          </CardHeader>
-          <CardContent />
-          <CardFooter>
-            <div class="text-xs text-muted-foreground">
-              Showing <strong>1-10</strong> of <strong>32</strong>
-              products
-            </div>
-          </CardFooter>
-        </Card>
-      </main>
-    </div>
+      </form>
+    </template>
   </DashboardLayout>
 </template>
