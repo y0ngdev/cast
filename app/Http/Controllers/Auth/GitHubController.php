@@ -32,7 +32,6 @@ class GitHubController extends Controller
             'provider_id' => $S_user->getId(),
         ])->first();
 
-
         if (! $user) {
 
             $validator = Validator::make(
@@ -58,7 +57,7 @@ class GitHubController extends Controller
             ]);
 
         }
-         // $user->token
+        // $user->token
 
         Auth::login($user);
 
@@ -66,7 +65,7 @@ class GitHubController extends Controller
 
     }
 
-    function generateUniqueUsername($desiredUsername)
+    public function generateUniqueUsername($desiredUsername)
     {
         $baseUsername = Str::slug($desiredUsername, '_');
         $username = $baseUsername;

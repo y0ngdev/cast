@@ -2,8 +2,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
+    "build": "node init && vite build",
+    "dev": "node init && vite",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "eslint --fix ."
